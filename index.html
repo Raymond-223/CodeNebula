@@ -646,15 +646,282 @@
                     <a href="https://github.com/Raymond-223" class="social-icon">
                         <i class="fab fa-github"></i>
                     </a>
-                    <a href="mailto:2246111707_lxz@stu.xjtu.edu.cn" class="social-icon" 
-                       onclick="window.location.href='mailto:2246111707_lxz@stu.xjtu.edu.cn'; return false;"
-                       title="发送邮件到 2246111707_lxz@stu.xjtu.edu.cn">
+                    <a href="javascript:void(0);" 
+                       class="social-icon"
+                       onclick="copyEmailAddress()"
+                       title="点击复制邮箱地址：2246111707_lxz@stu.xjtu.edu.cn">
                         <i class="far fa-envelope"></i>
                     </a>
                 </div>
             </div>
              
-                    
+<script>
+function copyEmailAddress() {
+    const email = '2246111707_lxz@stu.xjtu.edu.cn';
+    
+    // Copy to clipboard
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(email)
+            .then(() => {
+                showSuccessPopup(email);
+            })
+            .catch(err => {
+                showEmailPopup(email);
+            });
+    } else {
+        showEmailPopup(email);
+    }
+}
+
+function showSuccessPopup(email) {
+    // 创建弹窗
+    const popup = document.createElement('div');
+    popup.className = 'email-popup cosmic-popup';
+    popup.innerHTML = `
+        <div class="popup-content cosmic-popup-content">
+            <div class="popup-icon cosmic-icon">
+                <i class="fas fa-stars"></i>
+            </div>
+            <div class="popup-title cosmic-title">Email Copied</div>
+            <div class="popup-email cosmic-email">
+                <i class="fas fa-envelope mr-2"></i>
+                ${email}
+            </div>
+            <div class="cosmic-stars">
+                <div class="cosmic-star"></div>
+                <div class="cosmic-star"></div>
+                <div class="cosmic-star"></div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(popup);
+    
+    // 3秒后自动关闭
+    setTimeout(() => {
+        if (popup.parentNode) {
+            popup.style.opacity = '0';
+            popup.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                if (popup.parentNode) {
+                    popup.parentNode.removeChild(popup);
+                }
+            }, 300);
+        }
+    }, 3000);
+}
+
+function showEmailPopup(email) {
+    const popup = document.createElement('div');
+    popup.className = 'email-popup cosmic-popup';
+    popup.innerHTML = `
+        <div class="popup-content cosmic-popup-content">
+            <div class="popup-icon cosmic-icon">
+                <i class="fas fa-envelope-open-text"></i>
+            </div>
+            <div class="popup-title cosmic-title">Email Address</div>
+            <div class="popup-email cosmic-email">
+                ${email}
+            </div>
+            <div class="popup-tip cosmic-tip">Please copy the email address manually</div>
+            <button class="popup-close cosmic-close-btn" onclick="this.closest('.email-popup').remove()">
+                <i class="fas fa-times mr-2"></i>
+                Close
+            </button>
+        </div>
+    `;
+    
+    document.body.appendChild(popup);
+}
+
+// 添加样式
+const style = document.createElement('style');
+style.textContent = `
+.email-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(11, 11, 30, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: cosmicFadeIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    backdrop-filter: blur(10px);
+}
+
+@keyframes cosmicFadeIn {
+    from { opacity: 0; backdrop-filter: blur(0px); }
+    to { opacity: 1; backdrop-filter: blur(10px); }
+}
+
+.popup-content {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(12, 19, 34, 0.95));
+    padding: 40px 35px;
+    border-radius: 20px;
+    text-align: center;
+    min-width: 350px;
+    max-width: 450px;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    box-shadow: 0 20px 60px rgba(106, 90, 249, 0.25),
+                0 0 0 1px rgba(139, 92, 246, 0.1),
+                inset 0 0 30px rgba(139, 92, 246, 0.05);
+    animation: cosmicSlideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+@keyframes cosmicSlideUp {
+    from { transform: translateY(30px) scale(0.95); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.popup-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(139, 92, 246, 0.5), 
+        rgba(6, 182, 212, 0.5), 
+        rgba(139, 92, 246, 0.5), 
+        transparent);
+}
+
+.popup-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+    color: #8b5cf6;
+    text-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+    animation: cosmicGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes cosmicGlow {
+    from { text-shadow: 0 0 20px rgba(139, 92, 246, 0.5); }
+    to { text-shadow: 0 0 30px rgba(139, 92, 246, 0.8), 0 0 40px rgba(6, 182, 212, 0.4); }
+}
+
+.popup-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 20px;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 0.5px;
+}
+
+.popup-email {
+    background: rgba(139, 92, 246, 0.1);
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin: 20px 0;
+    font-family: 'Courier New', monospace;
+    color: #06b6d4;
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    word-break: break-all;
+    font-size: 15px;
+    line-height: 1.5;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.popup-email:hover {
+    background: rgba(139, 92, 246, 0.15);
+    border-color: rgba(139, 92, 246, 0.4);
+}
+
+.popup-email i {
+    color: #8b5cf6;
+    font-size: 14px;
+}
+
+.popup-tip {
+    color: #94a3b8;
+    font-size: 14px;
+    margin-top: 15px;
+    font-weight: 500;
+}
+
+.popup-close {
+    margin-top: 25px;
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #8b5cf6, #6a5af9);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 120px;
+}
+
+.popup-close:hover {
+    background: linear-gradient(135deg, #7c3aed, #5b21b6);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
+}
+
+.popup-close:active {
+    transform: translateY(0);
+}
+
+.cosmic-stars {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    display: flex;
+    gap: 5px;
+}
+
+.cosmic-star {
+    width: 6px;
+    height: 6px;
+    background: #06b6d4;
+    border-radius: 50%;
+    animation: starTwinkle 1.5s ease-in-out infinite;
+}
+
+.cosmic-star:nth-child(1) { animation-delay: 0s; }
+.cosmic-star:nth-child(2) { animation-delay: 0.3s; }
+.cosmic-star:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes starTwinkle {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+    .popup-content {
+        min-width: 280px;
+        max-width: 320px;
+        padding: 30px 25px;
+        margin: 0 20px;
+    }
+    
+    .popup-title {
+        font-size: 22px;
+    }
+    
+    .popup-email {
+        font-size: 14px;
+        padding: 14px 16px;
+    }
+}
+`;
+document.head.appendChild(style);
+</script>
+        
             <div class="border-t border-gray-800/50 mt-12 pt-8 text-center">
                 <p class="text-gray-500">
                     © 2026 CodeNebula. All rights reserved. | 
